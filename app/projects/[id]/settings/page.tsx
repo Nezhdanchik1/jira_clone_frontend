@@ -240,11 +240,9 @@ export default function ProjectSettingsPage() {
                 className="flex items-center justify-between p-3 border border-gray-200 rounded-lg"
               >
                 <div className="flex items-center space-x-3">
-                  <img
-                    src={member.avatar}
-                    alt={member.name}
-                    className="w-10 h-10 rounded-full"
-                  />
+                  <div className="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center text-white text-xs font-bold">
+                    {member.name.charAt(0)}
+                  </div>
                   <div>
                     <p className="font-medium text-gray-900">{member.name}</p>
                     <p className="text-sm text-gray-500">{member.email}</p>

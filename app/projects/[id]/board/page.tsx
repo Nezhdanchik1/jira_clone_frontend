@@ -142,7 +142,6 @@ export default function BoardPage() {
               </h1>
               <p className="text-gray-600 mt-1">
                 {project?.key} • Kanban Board
-                <span className="ml-2 text-green-600 text-xs">● Live</span>
               </p>
             </div>
             <div className="flex space-x-3">
