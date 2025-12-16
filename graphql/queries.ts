@@ -76,6 +76,55 @@ export const GET_TASKS = gql`
   }
 `;
 
+export const GET_TASK = gql`
+  query GetTask($id: ID!) {
+    task(id: $id) {
+      id
+      title
+      description
+      status
+      priority
+      taskKey
+      createdAt
+      updatedAt
+      project {
+        id
+        name
+        key
+      }
+      assignee {
+        id
+        name
+        avatar
+        email
+      }
+      reporter {
+        id
+        name
+        avatar
+        email
+      }
+    }
+  }
+`;
+
+export const GET_COMMENTS = gql`
+  query GetComments($taskId: ID!) {
+    comments(taskId: $taskId) {
+      id
+      content
+      isEdited
+      editedAt
+      createdAt
+      author {
+        id
+        name
+        avatar
+      }
+    }
+  }
+`;
+
 export const GET_USERS = gql`
   query GetUsers {
     users {

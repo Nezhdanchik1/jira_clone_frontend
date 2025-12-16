@@ -7,15 +7,37 @@ export const TASK_UPDATED = gql`
       task {
         id
         title
+        description
         status
         priority
-        position
         taskKey
+        position
         assignee {
           id
           name
           avatar
         }
+        reporter {
+          id
+          name
+        }
+      }
+    }
+  }
+`;
+
+export const COMMENT_ADDED = gql`
+  subscription CommentAdded($taskId: ID!) {
+    commentAdded(taskId: $taskId) {
+      id
+      content
+      isEdited
+      editedAt
+      createdAt
+      author {
+        id
+        name
+        avatar
       }
     }
   }
