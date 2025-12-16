@@ -90,14 +90,11 @@ export default function BoardPage() {
     const task = tasks.find((t: Task) => t.id === taskId);
     if (!task) return;
 
-    // Если статус не изменился, ничего не делаем
     if (task.status === newStatus) return;
 
-    // Получаем задачи в новом статусе
     const targetTasks = tasks.filter((t: Task) => t.status === newStatus);
     const newPosition = targetTasks.length;
 
-    // Оптимистичное обновление UI
     toast.promise(
       moveTask({
         variables: {
@@ -346,6 +343,5 @@ function TaskCard({
   );
 }
 
-// Импорты для DnD
 import { useDroppable } from "@dnd-kit/core";
 import { useDraggable } from "@dnd-kit/core";

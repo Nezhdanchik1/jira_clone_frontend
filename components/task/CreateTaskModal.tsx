@@ -5,6 +5,7 @@ import { useMutation, useQuery } from "@apollo/client/react";
 import { CREATE_TASK } from "@/graphql/mutations";
 import { GET_TASKS, GET_USERS } from "@/graphql/queries";
 import { User } from "@/types";
+import toast from "react-hot-toast";
 
 interface CreateTaskModalProps {
   projectId: string;
@@ -29,9 +30,11 @@ export default function CreateTaskModal({
   const [createTask, { loading }] = useMutation(CREATE_TASK, {
     refetchQueries: [{ query: GET_TASKS, variables: { projectId } }],
     onCompleted: () => {
+      toast.success("Task created successfully!");
       onSuccess();
     },
     onError: (error) => {
+      toast.error(error.message);
       setError(error.message);
     },
   });

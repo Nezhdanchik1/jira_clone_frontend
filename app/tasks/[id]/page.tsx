@@ -16,6 +16,7 @@ import { COMMENT_ADDED } from "@/graphql/subscriptions";
 import Navbar from "@/components/layout/Navbar";
 import { useAuthStore } from "@/store/authStore";
 import { User, Comment } from "@/types";
+import toast from "react-hot-toast";
 
 export default function TaskDetailPage() {
   const params = useParams();
@@ -71,35 +72,55 @@ export default function TaskDetailPage() {
 
   const [updateTask] = useMutation(UPDATE_TASK, {
     onCompleted: () => {
+      toast.success("Task updated successfully!");
       setIsEditing(false);
       refetchTask();
+    },
+    onError: (error) => {
+      toast.error(error.message);
     },
   });
 
   const [deleteTask] = useMutation(DELETE_TASK, {
     onCompleted: () => {
+      toast.success("Task deleted!");
       router.push(`/projects/${taskData?.task.project.id}/board`);
+    },
+    onError: (error) => {
+      toast.error(error.message);
     },
   });
 
   const [createComment] = useMutation(CREATE_COMMENT, {
     onCompleted: () => {
+      toast.success("Comment added!");
       setNewComment("");
       refetchComments();
+    },
+    onError: (error) => {
+      toast.error(error.message);
     },
   });
 
   const [updateComment] = useMutation(UPDATE_COMMENT, {
     onCompleted: () => {
+      toast.success("Comment updated!");
       setEditingCommentId(null);
       setEditCommentContent("");
       refetchComments();
+    },
+    onError: (error) => {
+      toast.error(error.message);
     },
   });
 
   const [deleteComment] = useMutation(DELETE_COMMENT, {
     onCompleted: () => {
+      toast.success("Comment deleted!");
       refetchComments();
+    },
+    onError: (error) => {
+      toast.error(error.message);
     },
   });
 

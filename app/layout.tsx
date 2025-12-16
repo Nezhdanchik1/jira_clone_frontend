@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { ApolloWrapper } from "@/lib/apollo-provider";
-import { Toaster } from "react-hot-toast"; // ← Проверьте импорт
+import { Toaster } from "react-hot-toast";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -21,7 +21,7 @@ export default function RootLayout({
       <body className={inter.className}>
         <ApolloWrapper>
           {children}
-          <Toaster position="top-right" /> {/* ← Проверьте что это есть */}
+          <Toaster position="top-right" />
         </ApolloWrapper>
       </body>
     </html>

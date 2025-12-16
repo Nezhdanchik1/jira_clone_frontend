@@ -22,7 +22,7 @@ export const useAuthStore = create<AuthStore>()(
       },
     }),
     {
-      name: "auth-storage", // ← имя в localStorage
+      name: "auth-storage",
     }
   )
 );

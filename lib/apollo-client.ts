@@ -11,7 +11,6 @@ const httpLink = new HttpLink({
 const authLink = setContext((_, { headers }) => {
   if (typeof window === "undefined") return { headers };
 
-  // Берем токен из localStorage напрямую (так как Zustand persist хранит там)
   const authStorage = localStorage.getItem("auth-storage");
   let token = null;
 

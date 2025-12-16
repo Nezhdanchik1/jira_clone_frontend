@@ -14,6 +14,7 @@ import {
 import Navbar from "@/components/layout/Navbar";
 import { useAuthStore } from "@/store/authStore";
 import { User } from "@/types";
+import toast from "react-hot-toast";
 
 export default function ProjectSettingsPage() {
   const params = useParams();
@@ -34,7 +35,6 @@ export default function ProjectSettingsPage() {
     variables: { id: projectId },
   });
 
-  // Используем useEffect для установки данных
   useEffect(() => {
     if (projectData?.project) {
       setName(projectData.project.name);
@@ -46,28 +46,43 @@ export default function ProjectSettingsPage() {
 
   const [updateProject] = useMutation(UPDATE_PROJECT, {
     onCompleted: () => {
-      alert("Project updated successfully!");
+      toast.success("Project updated successfully!");
       refetch();
+    },
+    onError: (error) => {
+      toast.error(error.message);
     },
   });
 
   const [deleteProject] = useMutation(DELETE_PROJECT, {
     onCompleted: () => {
+      toast.success("Project deleted!");
       router.push("/dashboard");
+    },
+    onError: (error) => {
+      toast.error(error.message);
     },
   });
 
   const [addMember] = useMutation(ADD_PROJECT_MEMBER, {
     onCompleted: () => {
+      toast.success("Member added successfully!");
       setShowAddMember(false);
       setSelectedUserId("");
       refetch();
+    },
+    onError: (error) => {
+      toast.error(error.message);
     },
   });
 
   const [removeMember] = useMutation(REMOVE_PROJECT_MEMBER, {
     onCompleted: () => {
+      toast.success("Member removed!");
       refetch();
+    },
+    onError: (error) => {
+      toast.error(error.message);
     },
   });
 
@@ -156,7 +171,6 @@ export default function ProjectSettingsPage() {
           <h1 className="text-3xl font-bold text-gray-900">Project Settings</h1>
         </div>
 
-        {/* Project Info */}
         <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
           <h2 className="text-xl font-semibold mb-4">Project Information</h2>
           <form onSubmit={handleUpdateProject} className="space-y-4">
@@ -206,7 +220,6 @@ export default function ProjectSettingsPage() {
           </form>
         </div>
 
-        {/* Members */}
         <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-xl font-semibold">
@@ -255,7 +268,6 @@ export default function ProjectSettingsPage() {
           </div>
         </div>
 
-        {/* Danger Zone */}
         {isOwner && (
           <div className="bg-white rounded-lg shadow-sm p-6 border-2 border-red-200">
             <h2 className="text-xl font-semibold text-red-600 mb-4">
@@ -274,7 +286,6 @@ export default function ProjectSettingsPage() {
           </div>
         )}
 
-        {/* Add Member Modal */}
         {showAddMember && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
             <div className="bg-white rounded-lg p-6 w-full max-w-md">

@@ -3,6 +3,7 @@
 import { useAuthStore } from "@/store/authStore";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import toast from "react-hot-toast";
 
 export default function Navbar() {
   const { user, logout } = useAuthStore();
@@ -10,6 +11,7 @@ export default function Navbar() {
 
   const handleLogout = () => {
     logout();
+    toast.success("Logged out successfully!");
     router.push("/login");
   };
 
