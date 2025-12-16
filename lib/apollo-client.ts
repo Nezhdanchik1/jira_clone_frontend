@@ -1,15 +1,29 @@
 import { ApolloClient, InMemoryCache, HttpLink, split } from "@apollo/client";
+import { setContext } from "@apollo/client/link/context";
 import { GraphQLWsLink } from "@apollo/client/link/subscriptions";
 import { getMainDefinition } from "@apollo/client/utilities";
 import { createClient } from "graphql-ws";
-import { setContext } from "@apollo/client/link/context";
 
 const httpLink = new HttpLink({
-  uri: process.env.NEXT_PUBLIC_API_URL,
+  uri: process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000/graphql",
 });
 
 const authLink = setContext((_, { headers }) => {
-  const token = localStorage.getItem("token");
+  if (typeof window === "undefined") return { headers };
+
+  // Берем токен из localStorage напрямую (так как Zustand persist хранит там)
+  const authStorage = localStorage.getItem("auth-storage");
+  let token = null;
+
+  if (authStorage) {
+    try {
+      const parsed = JSON.parse(authStorage);
+      token = parsed.state?.token;
+    } catch (e) {
+      console.error("Error parsing auth storage:", e);
+    }
+  }
+
   return {
     headers: {
       ...headers,

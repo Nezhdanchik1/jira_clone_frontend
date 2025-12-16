@@ -74,3 +74,49 @@ export const MOVE_TASK = gql`
     }
   }
 `;
+
+// Добавьте в конец файла:
+
+export const UPDATE_PROJECT = gql`
+  mutation UpdateProject($id: ID!, $name: String, $description: String) {
+    updateProject(id: $id, name: $name, description: $description) {
+      id
+      name
+      description
+    }
+  }
+`;
+
+export const DELETE_PROJECT = gql`
+  mutation DeleteProject($id: ID!) {
+    deleteProject(id: $id)
+  }
+`;
+
+export const ADD_PROJECT_MEMBER = gql`
+  mutation AddProjectMember($projectId: ID!, $userId: ID!) {
+    addProjectMember(projectId: $projectId, userId: $userId) {
+      id
+      members {
+        id
+        name
+        email
+        avatar
+      }
+    }
+  }
+`;
+
+export const REMOVE_PROJECT_MEMBER = gql`
+  mutation RemoveProjectMember($projectId: ID!, $userId: ID!) {
+    removeProjectMember(projectId: $projectId, userId: $userId) {
+      id
+      members {
+        id
+        name
+        email
+        avatar
+      }
+    }
+  }
+`;
