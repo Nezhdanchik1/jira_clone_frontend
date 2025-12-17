@@ -13,7 +13,7 @@ import {
 } from "@/graphql/mutations";
 import Navbar from "@/components/layout/Navbar";
 import { useAuthStore } from "@/store/authStore";
-import { User } from "@/types";
+import { User, GetProjectData, GetUsersData } from "@/types";
 import toast from "react-hot-toast";
 
 export default function ProjectSettingsPage() {
@@ -31,7 +31,7 @@ export default function ProjectSettingsPage() {
     data: projectData,
     loading,
     refetch,
-  } = useQuery(GET_PROJECT, {
+  } = useQuery<GetProjectData>(GET_PROJECT, {
     variables: { id: projectId },
   });
 
@@ -42,7 +42,7 @@ export default function ProjectSettingsPage() {
     }
   }, [projectData]);
 
-  const { data: usersData } = useQuery(GET_USERS);
+  const { data: usersData } = useQuery<GetUsersData>(GET_USERS);
 
   const [updateProject] = useMutation(UPDATE_PROJECT, {
     onCompleted: () => {

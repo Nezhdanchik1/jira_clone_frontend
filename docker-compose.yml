@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  frontend:
+    image: bakr458/jira-clone-frontend:latest
+    container_name: jira-frontend
+    ports:
+      - "3000:3000"
+    restart: always
+      # Add any environment variables your Next.js app needs here
+      # For example, if your backend is at http://localhost:4000
+      # NEXT_PUBLIC_GRAPHQL_API_URL: http://backend:4000/graphql
+      # Make sure to replace 'backend' with the actual service name of your backend in docker-compose
+      # or the appropriate URL if your backend is external.
+      # For now, I'll leave it commented out as I don't have information about your backend.
+      # If you have a backend service in the same compose file, you would reference it by its service name.
+      # For example, if your backend service is named 'backend', then the URL would be 'http://backend:4000/graphql'
+      # If your backend is running on the host machine and not in a docker container, you might need to use host.docker.internal
+      # NEXT_PUBLIC_GRAPHQL_API_URL: http://host.docker.internal:4000/graphql

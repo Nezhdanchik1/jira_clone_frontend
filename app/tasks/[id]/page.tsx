@@ -15,7 +15,15 @@ import {
 import { COMMENT_ADDED } from "@/graphql/subscriptions";
 import Navbar from "@/components/layout/Navbar";
 import { useAuthStore } from "@/store/authStore";
-import { User, Comment } from "@/types";
+import {
+  User,
+  Comment,
+  GetTaskData,
+  TaskDetail,
+  GetCommentsData,
+  CommentDetail,
+  GetUsersData,
+} from "@/types";
 import toast from "react-hot-toast";
 
 export default function TaskDetailPage() {
@@ -39,7 +47,7 @@ export default function TaskDetailPage() {
     data: taskData,
     loading: taskLoading,
     refetch: refetchTask,
-  } = useQuery(GET_TASK, {
+  } = useQuery<GetTaskData>(GET_TASK, {
     variables: { id: taskId },
   });
 
@@ -47,7 +55,7 @@ export default function TaskDetailPage() {
     data: commentsData,
     loading: commentsLoading,
     refetch: refetchComments,
-  } = useQuery(GET_COMMENTS, {
+  } = useQuery<GetCommentsData>(GET_COMMENTS, {
     variables: { taskId },
   });
 
@@ -58,7 +66,7 @@ export default function TaskDetailPage() {
     },
   });
 
-  const { data: usersData } = useQuery(GET_USERS);
+  const { data: usersData } = useQuery<GetUsersData>(GET_USERS);
 
   useEffect(() => {
     if (taskData?.task) {
@@ -384,7 +392,7 @@ export default function TaskDetailPage() {
                     No comments yet
                   </div>
                 ) : (
-                  comments.map((comment: Comment) => (
+                  comments.map((comment: CommentDetail) => (
                     <div
                       key={comment.id}
                       className="border border-gray-200 rounded-lg p-4"

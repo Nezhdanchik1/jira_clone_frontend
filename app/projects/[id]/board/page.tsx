@@ -18,7 +18,12 @@ import { MOVE_TASK } from "@/graphql/mutations";
 import { TASK_UPDATED } from "@/graphql/subscriptions";
 import Navbar from "@/components/layout/Navbar";
 import CreateTaskModal from "@/components/task/CreateTaskModal";
-import { Task } from "@/types";
+import {
+  Task,
+  GetProjectData,
+  GetTasksData,
+  TaskTeaser,
+} from "@/types";
 import toast from "react-hot-toast";
 
 export default function BoardPage() {
@@ -26,7 +31,7 @@ export default function BoardPage() {
   const router = useRouter();
   const projectId = params.id as string;
   const [showCreateTaskModal, setShowCreateTaskModal] = useState(false);
-  const [activeTask, setActiveTask] = useState<Task | null>(null);
+  const [activeTask, setActiveTask] = useState<TaskTeaser | null>(null);
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -36,7 +41,7 @@ export default function BoardPage() {
     })
   );
 
-  const { data: projectData, loading: projectLoading } = useQuery(GET_PROJECT, {
+  const { data: projectData, loading: projectLoading } = useQuery<GetProjectData>(GET_PROJECT, {
     variables: { id: projectId },
   });
 
@@ -44,7 +49,7 @@ export default function BoardPage() {
     data: tasksData,
     loading: tasksLoading,
     refetch,
-  } = useQuery(GET_TASKS, {
+  } = useQuery<GetTasksData>(GET_TASKS, {
     variables: { projectId },
   });
 
@@ -68,13 +73,13 @@ export default function BoardPage() {
   const project = projectData?.project;
   const tasks = tasksData?.tasks || [];
 
-  const todoTasks = tasks.filter((t: Task) => t.status === "TODO");
-  const inProgressTasks = tasks.filter((t: Task) => t.status === "IN_PROGRESS");
-  const doneTasks = tasks.filter((t: Task) => t.status === "DONE");
+  const todoTasks = tasks.filter((t: TaskTeaser) => t.status === "TODO");
+  const inProgressTasks = tasks.filter((t: TaskTeaser) => t.status === "IN_PROGRESS");
+  const doneTasks = tasks.filter((t: TaskTeaser) => t.status === "DONE");
 
   const handleDragStart = (event: DragStartEvent) => {
     const { active } = event;
-    const task = tasks.find((t: Task) => t.id === active.id);
+    const task = tasks.find((t: TaskTeaser) => t.id === active.id);
     setActiveTask(task || null);
   };
 
@@ -87,12 +92,12 @@ export default function BoardPage() {
     const taskId = active.id as string;
     const newStatus = over.id as "TODO" | "IN_PROGRESS" | "DONE";
 
-    const task = tasks.find((t: Task) => t.id === taskId);
+    const task = tasks.find((t: TaskTeaser) => t.id === taskId);
     if (!task) return;
 
     if (task.status === newStatus) return;
 
-    const targetTasks = tasks.filter((t: Task) => t.status === newStatus);
+    const targetTasks = tasks.filter((t: TaskTeaser) => t.status === newStatus);
     const newPosition = targetTasks.length;
 
     toast.promise(
@@ -226,7 +231,7 @@ function Column({
 }: {
   id: string;
   title: string;
-  tasks: Task[];
+  tasks: TaskTeaser[];
   count: number;
   router: any;
 }) {
@@ -248,7 +253,7 @@ function Column({
             Drop tasks here
           </div>
         ) : (
-          tasks.map((task: Task) => (
+          tasks.map((task: TaskTeaser) => (
             <DraggableTask key={task.id} task={task} router={router} />
           ))
         )}
@@ -257,7 +262,7 @@ function Column({
   );
 }
 
-function DraggableTask({ task, router }: { task: Task; router: any }) {
+function DraggableTask({ task, router }: { task: TaskTeaser; router: any }) {
   const { attributes, listeners, setNodeRef, transform, isDragging } =
     useDraggable({
       id: task.id,
@@ -282,7 +287,7 @@ function TaskCard({
   router,
   isDragging = false,
 }: {
-  task: Task;
+  task: TaskTeaser;
   router?: any;
   isDragging?: boolean;
 }) {

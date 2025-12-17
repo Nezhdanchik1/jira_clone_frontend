@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useMutation, useQuery } from "@apollo/client/react";
 import { CREATE_TASK } from "@/graphql/mutations";
 import { GET_TASKS, GET_USERS } from "@/graphql/queries";
-import { User } from "@/types";
+import { User, GetUsersData } from "@/types";
 import toast from "react-hot-toast";
 
 interface CreateTaskModalProps {
@@ -24,7 +24,7 @@ export default function CreateTaskModal({
   const [assigneeId, setAssigneeId] = useState("");
   const [error, setError] = useState("");
 
-  const { data: usersData } = useQuery(GET_USERS);
+  const { data: usersData } = useQuery<GetUsersData>(GET_USERS);
   const users = usersData?.users || [];
 
   const [createTask, { loading }] = useMutation(CREATE_TASK, {

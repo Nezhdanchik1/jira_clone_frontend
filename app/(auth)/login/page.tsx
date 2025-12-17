@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { LOGIN } from "@/graphql/mutations";
 import { useAuthStore } from "@/store/authStore";
+import { LoginData } from "@/types";
 import toast from "react-hot-toast";
 
 export default function LoginPage() {
@@ -15,7 +16,7 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
-  const [login, { loading }] = useMutation(LOGIN, {
+  const [login, { loading }] = useMutation<LoginData>(LOGIN, {
     onCompleted: (data) => {
       toast.success("Login successful!");
       setAuth(data.login.token, data.login.user);

@@ -1,13 +1,18 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useQuery, useMutation } from "@apollo/client/react";
 import { useRouter } from "next/navigation";
 import { GET_PROJECTS, GET_ME } from "@/graphql/queries";
 import { CREATE_PROJECT } from "@/graphql/mutations";
 import { useAuthStore } from "@/store/authStore";
 import Navbar from "@/components/layout/Navbar";
-import { Project } from "@/types";
+import {
+  Project,
+  GetMeData,
+  GetProjectsData,
+  ProjectTeaser,
+} from "@/types";
 
 export default function DashboardPage() {
   const router = useRouter();
@@ -15,19 +20,28 @@ export default function DashboardPage() {
   const [search, setSearch] = useState("");
   const [showCreateModal, setShowCreateModal] = useState(false);
 
-  const { data: meData, loading: meLoading } = useQuery(GET_ME, {
-    onCompleted: (data) => {
+  const {
+    data: meData,
+    loading: meLoading,
+    error: meError,
+  } = useQuery<GetMeData>(GET_ME);
+
+  useEffect(() => {
+    if (meData) {
       const token = localStorage.getItem("token");
       if (token) {
-        setAuth(token, data.me);
+        setAuth(token, meData.me);
       }
-    },
-    onError: () => {
-      router.push("/login");
-    },
-  });
+    }
+  }, [meData, setAuth]);
 
-  const { data, loading, refetch } = useQuery(GET_PROJECTS);
+  useEffect(() => {
+    if (meError) {
+      router.push("/login");
+    }
+  }, [meError, router]);
+
+  const { data, loading, refetch } = useQuery<GetProjectsData>(GET_PROJECTS);
 
   if (meLoading) {
     return (
@@ -39,7 +53,7 @@ export default function DashboardPage() {
 
   const projects = data?.projects || [];
   const filteredProjects = projects.filter(
-    (p: Project) =>
+    (p: ProjectTeaser) =>
       p.name.toLowerCase().includes(search.toLowerCase()) ||
       p.key.toLowerCase().includes(search.toLowerCase())
   );
@@ -99,7 +113,7 @@ export default function DashboardPage() {
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredProjects.map((project: Project) => (
+            {filteredProjects.map((project: ProjectTeaser) => (
               <div
                 key={project.id}
                 onClick={() => router.push(`/projects/${project.id}/board`)}

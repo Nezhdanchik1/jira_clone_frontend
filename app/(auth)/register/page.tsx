@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { REGISTER } from "@/graphql/mutations";
 import { useAuthStore } from "@/store/authStore";
+import { RegisterData } from "@/types";
 import toast from "react-hot-toast";
 
 export default function RegisterPage() {
@@ -16,7 +17,7 @@ export default function RegisterPage() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
-  const [register, { loading }] = useMutation(REGISTER, {
+  const [register, { loading }] = useMutation<RegisterData>(REGISTER, {
     onCompleted: (data) => {
       toast.success("Registration successful!");
       setAuth(data.register.token, data.register.user);
